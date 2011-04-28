@@ -3,7 +3,6 @@ package no.ovstetun
 import org.specs2.mutable._
 
 class HelloWorldSpec extends Specification {
-
   "The 'Hello world' string" should {
     val s = "Hello world"
 
