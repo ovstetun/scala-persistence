@@ -1,4 +1,4 @@
-package no.ovstetun
+package no.ovstetun.tryout
 
 import org.specs2.mutable._
 
