@@ -20,7 +20,7 @@ trait DBSpec extends Specification with AroundExample {
 
 
   def around[T <% Result](t: => T) = db withSession {
-    MyTable.ddl create
+    MyTable.ddl.create
 
     t
   }
