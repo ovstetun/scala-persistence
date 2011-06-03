@@ -14,3 +14,5 @@ libraryDependencies ++= Seq(
 scalaVersion := "2.9.0"
 
 resolvers += ScalaToolsSnapshots
+
+parallelExecution in Test := false
