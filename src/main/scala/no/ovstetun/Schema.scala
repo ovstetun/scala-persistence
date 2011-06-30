@@ -9,8 +9,8 @@ trait Schema {
 
   object Users extends Table[(Int, String, String)]("USERS") {
     def id = column[Int]("id", O PrimaryKey, O AutoInc)
-    def firstname = column[String]("firstname")
-    def lastname = column[String]("lastname")
+    def firstname = column[String]("FIRSTNAME")
+    def lastname = column[String]("LASTNAME")
 
     def * = id ~ firstname ~ lastname
     def forinsert = firstname ~ lastname
@@ -23,7 +23,4 @@ trait Schema {
 
     def * = id.? ~ name <> (A, A.unapply _)
   }
-
-  def ddl = Users.ddl
-  
 }

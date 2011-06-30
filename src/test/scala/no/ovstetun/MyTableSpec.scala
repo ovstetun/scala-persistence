@@ -14,7 +14,7 @@ import java.sql.SQLException
 trait DBSpec extends Specification with AroundExample {
   args(sequential=true)
 
-  val db = Database.forURL("jdbc:h2:mem:test", driver = "org.h2.Driver")
+  val db : Database = Database.forURL("jdbc:h2:mem:test", driver = "org.h2.Driver")
   val driver = H2Driver
   import driver.Implicit._
 
