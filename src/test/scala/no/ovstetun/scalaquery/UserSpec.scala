@@ -1,5 +1,4 @@
-package no.ovstetun
-
+package no.ovstetun.scalaquery
 
 import org.scalaquery.session.Database
 import Database.threadLocalSession

@@ -1,4 +1,4 @@
-package no.ovstetun
+package no.ovstetun.scalaquery
 
 import org.scalaquery.ql._
 import extended.{ExtendedProfile, ExtendedTable => Table}
