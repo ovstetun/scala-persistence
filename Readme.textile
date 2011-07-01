@@ -1,3 +1,0 @@
-h1. TMO som leker seg med scalaquery
-
-bygges med sbt
