@@ -6,6 +6,8 @@ organization := "no.ovstetun"
 
 libraryDependencies += "org.scalaquery" % "scalaquery_2.9.0" % "0.9.4"
 
+libraryDependencies += "org.squeryl" %% "squeryl" % "0.9.4"
+
 libraryDependencies ++= Seq(
   "org.specs2" %% "specs2" % "1.4" % "test",
   "com.h2database" % "h2" % "1.3.153" % "test",
