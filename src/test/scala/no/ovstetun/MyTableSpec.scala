@@ -1,8 +1,5 @@
 package no.ovstetun
 
-import org.specs2.mutable._
-import org.specs2.execute._
-import org.specs2.specification._
 
 import org.scalaquery.session._
 import org.scalaquery.session.Database.threadLocalSession
@@ -10,6 +7,9 @@ import org.scalaquery.ql._
 import extended.{ExtendedProfile, ExtendedTable => Table}
 import org.scalaquery.ql.extended.H2Driver
 import java.sql.SQLException
+import org.specs2.specification.AroundExample
+import org.specs2.mutable.{Before, Specification}
+import org.specs2.execute.Result
 
 trait DBSpec extends Specification with AroundExample {
   args(sequential=true)

@@ -16,11 +16,4 @@ trait Schema {
     def forinsert = firstname ~ lastname
   }
 
-  case class A(id : Option[Int], name : String)
-  object AT extends Table[A]("a") {
-    def id = column[Int]("id", O PrimaryKey, O AutoInc)
-    def name = column[String]("name")
-
-    def * = id.? ~ name <> (A, A.unapply _)
-  }
 }

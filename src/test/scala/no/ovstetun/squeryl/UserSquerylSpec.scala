@@ -7,7 +7,7 @@ import org.squeryl.{Schema, KeyedEntity, Session, SessionFactory}
 import org.specs2.specification.AroundExample
 import org.specs2.execute.Result
 
-class User(val id:Int, var firstname:String, var lastname:String) extends KeyedEntity[Int] {
+case class User(val id:Int, var firstname:String, var lastname:String) extends KeyedEntity[Int] {
 
 }
 object SquerylSchema extends Schema {

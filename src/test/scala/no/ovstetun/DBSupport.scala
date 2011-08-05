@@ -2,7 +2,6 @@ package no.ovstetun
 
 import javax.sql.DataSource
 import org.h2.jdbcx.JdbcDataSource
-import java.sql.Connection
 
 trait DBSupport {
   lazy val ds : DataSource = {
