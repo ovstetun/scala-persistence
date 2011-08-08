@@ -28,8 +28,11 @@ class JPASpec extends Specification {
       val u = new User
       u.firstname = "tm"
       u.lastname = "o"
+      u.id must_== 0
 
       em.persist(u)
+      u.id must_!= 0
+
       q.getSingleResult must_== 1
     }
   }
