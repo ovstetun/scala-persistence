@@ -8,7 +8,7 @@ import java.sql.Statement
 
 
 class JDBCSpec extends Specification with DBSupport {
-  lazy val con = ds.getConnection()
+  lazy val con = ds.getConnection
   def stmt = con.createStatement()
 
   object a extends Around {
@@ -35,7 +35,7 @@ class JDBCSpec extends Specification with DBSupport {
 
       pstmt.executeUpdate() must_== 1
 
-      val rs = pstmt.getGeneratedKeys()
+      val rs = pstmt.getGeneratedKeys
       rs.next()
       rs.getInt(1) must beGreaterThan(1)
     }

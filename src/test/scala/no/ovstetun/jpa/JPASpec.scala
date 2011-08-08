@@ -1,18 +1,18 @@
 package no.ovstetun.jpa
 
 import org.specs2.mutable.Specification
-import javax.persistence.Persistence
 import org.specs2.mutable.After
+import javax.persistence.Persistence
 
 class JPASpec extends Specification {
-  lazy val emf = Persistence.createEntityManagerFactory("sakPU")
+  lazy val emf = Persistence.createEntityManagerFactory("pu")
 
   trait t extends After {
-    lazy val em = emf.createEntityManager()
-    em.getTransaction.begin
+    val em = emf.createEntityManager()
+    em.getTransaction.begin()
 
-    def after = {
-      em.getTransaction.rollback
+    def after {
+      em.getTransaction.rollback()
     }
   }
 
@@ -38,7 +38,7 @@ class JPASpec extends Specification {
   }
   
   step {
-    emf.close
+    emf.close()
     success
   }
 }
