@@ -18,5 +18,27 @@
       </column>
     </createTable>
   </changeSet>
+  <changeSet id="2" author="trondmarius">
+    <addColumn tableName="users">
+      <column name="email" type="varchar(40)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet id="3" author="trondmarius">
+    <createTable tableName="posts">
+      <column name="id" autoIncrement="true" type="int">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="title" type="varchar(255)">
+        <constraints nullable="false"></constraints>
+      </column>
+      <column name="content" type="text"/>
+      <column name="author" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="posts" baseColumnNames="author" constraintName="post_author_fk"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+  </changeSet>
 
 </databaseChangeLog>

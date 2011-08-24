@@ -7,13 +7,6 @@ import org.squeryl.{Schema, KeyedEntity, Session, SessionFactory}
 import org.specs2.specification.AroundExample
 import org.specs2.execute.Result
 
-case class User(val id:Int, var firstname:String, var lastname:String) extends KeyedEntity[Int] {
-
-}
-object SquerylSchema extends Schema {
-  val users = table[User]("users")
-}
-
 class UserSquerylSpec extends Specification with DBSupport with AroundExample {
 
   SessionFactory.concreteFactory = Some(() =>
@@ -33,7 +26,7 @@ class UserSquerylSpec extends Specification with DBSupport with AroundExample {
 
   "Users" should {
     "be insertable" in {
-      val tm = users.insert(new User(0, "Trond", "Ovstetun"))
+      val tm = users.insert(new User("Trond", "Ovstetun"))
       tm.id must_!= 0
     }
     "be able to count the contents" in {
@@ -42,6 +35,48 @@ class UserSquerylSpec extends Specification with DBSupport with AroundExample {
       )
 
       q must_== 0
+    }
+    "calculate the average id" in {
+      val q:Option[Float] = from(users)(u =>
+        compute(avg(u.id))
+      )
+
+      q must beNone
+    }
+    "select all users" in {
+      val u1 = users.insert(new User("Trond", "Ovstetun"))
+      val u2 = users.insert(new User("Trond", "Ovstetun"))
+      val all = List(u1, u2)
+
+      val us = from(users)(select(_))
+
+      us.foreach(u =>
+        u.id must beGreaterThan(0)
+      )
+      val l = for (u <- us) yield {
+        u.id must beGreaterThan(0)
+        u
+      }
+      
+      us.size must_== 2
+      all must_== l
+    }
+    "create user" in {
+      val tm = new User("trond", "ovstetun")
+      tm.isPersisted must_== false
+      tm.id must_== 0
+
+      val saved = save(tm)
+      saved.isPersisted must_== true
+      saved.id must_!= 0
+      saved must beTheSameAs(tm)
+      
+      tm.id must_!= 0
+      tm.isPersisted must_== true
+    }
+    "delete user" in {
+      users.insert(new User("Trond", "Ovstetun"))
+      users.deleteWhere(u => u.id != 0) must_== 0
     }
   }
 
