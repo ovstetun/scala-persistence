@@ -3,7 +3,7 @@
 This project is to show different ways to interact with a relational database in Scala.
 
 * Raw JDBC
-* JPA (using [Hibernate][hibernate])
+* JPA (using [Eclipselink][eclipselink])
 * [ScalaQuery][scalaquery]
 * [Squeryl][squeryl]
 
@@ -19,4 +19,4 @@ The project contains specifications written in [specs2], and built with [sbt 0.1
 [sbt]:https://github.com/harrah/xsbt/
 [scalaquery]:http://scalaquery.org
 [squeryl]:http://squeryl.org
-[hibernate]:http://hibernate.org
+[eclipselink]:http://www.eclipse.org/eclipselink/
