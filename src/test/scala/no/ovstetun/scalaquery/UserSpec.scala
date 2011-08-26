@@ -12,6 +12,7 @@ import org.specs2.specification._
 
 class UserSpec extends Specification with AroundExample with DBSupport {
   lazy val db = Database.forDataSource(ds)
+  implicit def conn = threadLocalSession.conn
 
   val s = new H2Driver with Schema
   import s.Implicit._
@@ -34,12 +35,25 @@ class UserSpec extends Specification with AroundExample with DBSupport {
 
   "Users" should {
     "be able to count" in {
-      Query(Users.count).first must_== 0
+      loadData
+
+      Query(Users.count).first must_== 4
+
+      val q = for(u <- Users if u.email =!= null.asInstanceOf[String]) yield u
+      q.list().size must_== 2
     }
     "allow insert of user in empty structure" in {
       val i = Users.forinsert.insert(("trond", "ovstetun"))
       i must_== 1
       Query(Users.count).first must_== 1
+
+      val i2 = Users.insert((1000, "Petter", "Pan", None))
+      i2 must_== 1
+      Query(Users.count).first must_== 2
+
+      val qPetter = Users.createFinderBy(_.id)
+      qPetter(1000).first must_== (1000, "Petter", "Pan", None)
+
     }
     "allow insert of a bunch of users" in {
       val i = Users.forinsert.insertAll(
@@ -75,6 +89,13 @@ class UserSpec extends Specification with AroundExample with DBSupport {
       for (u:User <- q) {
         u.id should be_>(1)
       }
+    }
+  }
+
+  "Posts" should {
+    "insert" in {
+//      Posts.forinsert.insert(("", None, 4)) must_== 1
+      pending
     }
   }
 }

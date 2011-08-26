@@ -1,0 +1,8 @@
+<dataset>
+  <users id="1001" firstname="Buster" lastname="Minal" email="buster@minal.org" />
+  <users id="1002" firstname="Tine" lastname="Melch" email="[null]" />
+  <users id="1003" firstname="Tom" lastname="Bola" email="tombola@example.com" />
+  <users id="1004" firstname="Guri" lastname="Malla" email="[null]" />
+
+  <posts id="1001" title="Hello World!" content="This is the first post :)" author="1001" />
+</dataset>

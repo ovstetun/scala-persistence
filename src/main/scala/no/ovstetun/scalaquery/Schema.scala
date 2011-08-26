@@ -18,6 +18,16 @@ trait Schema {
     def * = id ~ firstname ~ lastname ~ email
     def forinsert = firstname ~ lastname
   }
+
+  object Posts extends Table[(Int, String, Option[String], Int)]("POSTS") {
+    def id = column[Int]("ID", O PrimaryKey, O AutoInc)
+    def title = column[String]("TITLE")
+    def content = column[Option[String]]("CONTENT")
+    def author_id = column[Int]("AUTHOR")
+
+    def * = id ~ title ~ content ~ author_id
+    def forinsert = title ~ content ~ author_id
+  }
 }
 
 case class User(id:Int, firstname:String, lastname:String)
