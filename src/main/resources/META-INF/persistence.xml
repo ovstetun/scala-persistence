@@ -3,7 +3,7 @@
 
   <persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
 
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
     <class>no.ovstetun.jpa.User</class>
 
@@ -15,10 +15,7 @@
       <property name="javax.persistence.jdbc.user" value="sa"/>
       <property name="javax.persistence.jdbc.password" value=""/>
 
-      <property name="hibernate.archive.autodetection" value="class"/>
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="true"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
     </properties>
   </persistence-unit>
 
