@@ -10,5 +10,5 @@ object Genre extends Enumeration {
   val Rap = Value
   val HipHop = Value
   val Alternative = Value
-  
+
 }
