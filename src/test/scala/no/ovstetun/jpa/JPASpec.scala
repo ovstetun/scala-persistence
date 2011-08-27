@@ -1,6 +1,5 @@
-package no.ovstetun.jpa
-
-import no.ovstetun.DBSupport
+package no.ovstetun
+package jpa
 
 class JPASpec extends BaseJPASpec with DBSupport {
   "jpa" should {
@@ -17,10 +16,12 @@ class JPASpec extends BaseJPASpec with DBSupport {
       val u = new User
       u.firstname = "tm"
       u.lastname = "o"
+      u.email = "tmo@ovstetun.no"
       u.id must_== 0
 
       em.persist(u)
-      em.flush
+      em.flush()
+      
       u.id must_!= 0
 
       q.getSingleResult must_== 1
