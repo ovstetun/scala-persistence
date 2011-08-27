@@ -5,8 +5,7 @@
 
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-    <class>no.ovstetun.jpa.User</class>
-
+    <!--<class>no.ovstetun.jpa.User</class>-->
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
     <properties>

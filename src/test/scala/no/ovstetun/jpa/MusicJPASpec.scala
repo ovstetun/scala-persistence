@@ -5,6 +5,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class MusicJPASpec extends BaseJPASpec with DBSupport {
+  trait tdata extends t {
+    loadData
+  }
+
   "Music database using JPA" should {
     "count empty table" in new t {
       val q = em.createQuery("SELECT COUNT(a) FROM Artist a", classOf[Long])
@@ -15,23 +19,40 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       a.name = "Pink Floyd"
       a.biography = "bla bla bla"
       a.founded = "1965-01-20"
+      a.maingenre = Genre.Alternative
 
       em.persist(a)
       em.flush()
       a.id must_!= 0
     }
-    "retrieve all artists" in new t {
-      loadData
-
-      val q = em.createQuery("SELECT a FROM Artist a", classOf[Artist])
-      val artists = q.getResultList
-      artists.size must_== 4
-    }
-    "retrieve Tool with correct genre" in new t {
-      loadData
+    "retrieve Tool with correct genre by id" in new tdata {
       val tool = em.find(classOf[Artist], 1001)
       tool.name must_== "Tool"
       tool.maingenre must_== Genre.Rock
+    }
+    "retrieve Jay-Z using a query by name" in new tdata {
+      val jzq = em.createQuery("SELECT a FROM Artist a WHERE a.name = :name", classOf[Artist])
+      jzq.setParameter("name", "Jay-Z")
+
+      val jz = jzq.getSingleResult
+      jz.id must_== 1004
+      jz.maingenre must_== Genre.Rap
+    }
+    "find by id should returns null for None" in new tdata {
+      em.find(classOf[Artist], 999) must_== null
+    }
+    "retrieve all artists is java list" in new tdata {
+      val q = em.createQuery("SELECT a FROM Artist a", classOf[Artist])
+      val artists : java.util.List[Artist] = q.getResultList
+      artists.size must_== 4
+
+      import scala.collection.JavaConversions._
+      val scalaArtists = q.getResultList
+      artists.count(_ => true) must_== 4
+
+      val (rockers, others) = artists.partition(_.maingenre == Genre.Rock)
+      rockers.size must_== 1
+      others.size must_== 3
     }
   }
 
