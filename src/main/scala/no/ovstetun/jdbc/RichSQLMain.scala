@@ -96,7 +96,7 @@ object RichSQLMain {
     // show that there are natural boundaries between operator characters
     // and identifiers. The <<! postfix operator calls the
     // PreparedStatement's execute method.
-    for (val name <- names)
+    for (name <- names)
       insertPerson<<rnd.nextInt(10)<<name<<!
 
     // Execute a query against an implicit Statement. The
@@ -114,11 +114,11 @@ object RichSQLMain {
     // those used earlier.
     // Once we've recovered our person object, we convert it to
     // XML and print it out.
-    for (val person <- query("select * from person order by id", rs => Person(rs,rs,rs)))
+    for (person <- query("select * from person order by id", rs => Person(rs,rs,rs)))
       println(person.toXML)
 
     // The same thing can be done with a RichPreparedStatement
-    for (val person <- "select * from person order by id" <<! (rs => Person(rs,rs,rs)))
+    for (person <- "select * from person order by id" <<! (rs => Person(rs,rs,rs)))
       println(person.toXML)
   }
 

@@ -5,7 +5,7 @@
 
 package no.ovstetun.jdbc
 
-import java.sql.{DriverManager, Connection, ResultSet, PreparedStatement, Statement, Date}
+import java.sql.{Connection, ResultSet, PreparedStatement, Statement, Date}
 
 object RichSQL {
   implicit def rrs2Boolean(rs: RichResultSet) = rs.nextBoolean
@@ -91,6 +91,6 @@ object RichSQL {
 
   class RichStatement(val s: Statement) {
     def <<(sql: String) = { s.execute(sql); this }
-    def <<(sql: Seq[String]) = { for (val x <- sql) s.execute(x); this }
+    def <<(sql: Seq[String]) = { for (x <- sql) s.execute(x); this }
   }
 }
