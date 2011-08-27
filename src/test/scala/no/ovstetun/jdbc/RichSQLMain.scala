@@ -29,33 +29,17 @@ object RichSQLMain {
   import RichSQL._
 
   // a random number generator. Note that we're using our altered name.
-  private val rnd = new JRandom()
-
-  // commands to set up a simple database. Scala has multi-line
-  // string constants, which are very handy when we want to embed
-  // things like extended text, or sql commands.
-
-  // was: id identity -- in H2, id serial -- in Pg
-  private val setup = Array (
-    """
-        drop table if exists person
-    ""","""
-    create table person(
-        id serial,
-        type int,
-        name varchar not null)
-""")
 
   // some additional data. Scala's type inferencing makes this into an
   // Array[String] -- an Array of Strings.
   private val names =
     Array(
-      "Ross",
-      "Lynn",
-      "John",
-      "Terri",
-      "Steve",
-      "Zobeyda")
+      ("Ross", "Rosson"),
+      ("Lynn", "Boyle"),
+      ("John", "Barnes"),
+      ("Terri", "Hatcher"),
+      ("Steve", "Jobs"),
+      ("Zobeyda", "Dobson"))
 
   def go = {
     // Create a connection to the database. Catching exceptions is
@@ -66,7 +50,7 @@ object RichSQLMain {
     // "conn" is also typed as implicit, which means it will
     // be automatically used in any function call that
     // requires a Connection in an implicit parameter position.
-    implicit val conn = connect("jdbc:postgresql:database", "user", "pwd")
+    implicit val conn = connect("jdbc:h2:test", "sa", "")
 
     // Our RichSQL environment does quite a bit for us
     // with minimal syntax. "setup" is an array of commands
@@ -81,12 +65,12 @@ object RichSQLMain {
     // "s" is also typed as implicit, which means it will
     // be automatically used in any function call that
     // requires a Statement in an implicit parameter position.
-    implicit val s: Statement = conn << setup
+    implicit val s: Statement = conn //<< setup
 
     // Creates a JDBC prepared statement. We can omit the
     // period and parentheses in simple calls x.f(y) can
     // be written as x f y.
-    val insertPerson = conn prepareStatement "insert into person(type, name) values(?, ?)"
+    val insertPerson = conn prepareStatement "insert into users(firstname, lastname) values(?, ?)"
     // For each name in our list of names, load the prepared
     // statement with a random number and the name, then
     // execute it. Our RichPreparedStatement has type-specific
@@ -96,8 +80,8 @@ object RichSQLMain {
     // show that there are natural boundaries between operator characters
     // and identifiers. The <<! postfix operator calls the
     // PreparedStatement's execute method.
-    for (name <- names)
-      insertPerson<<rnd.nextInt(10)<<name<<!
+    for ((firstname, lastname) <- names)
+      insertPerson << firstname << lastname <<!
 
     // Execute a query against an implicit Statement. The
     // query function looks for a Statement declared as "implicit"
@@ -114,22 +98,22 @@ object RichSQLMain {
     // those used earlier.
     // Once we've recovered our person object, we convert it to
     // XML and print it out.
-    for (person <- query("select * from person order by id", rs => Person(rs,rs,rs)))
+    for (person <- query("select * from users order by id", rs => Person(rs,rs,rs)))
       println(person.toXML)
 
     // The same thing can be done with a RichPreparedStatement
-    for (person <- "select * from person order by id" <<! (rs => Person(rs,rs,rs)))
+    for (person <- "select * from users order by id" <<! (rs => Person(rs,rs,rs)))
       println(person.toXML)
   }
 
   /** A simple class holding information about a person. */
-  case class Person(id: Long, tpe: Int, name: String) {
-    def toXML = <person id={id.toString} type={tpe.toString}>{name}</person>
+  case class Person(id: Long, firstname: String, lastname: String) {
+    def toXML = <person id={id.toString}>{firstname} {lastname}</person>
   }
 
   def main(args: Array[String]): Unit = {
-//    val dbDriver = Class.forName("org.postgresql.Driver")
-//    go
+    val dbDriver = Class.forName("org.h2.Driver")
+    go
   }
 
   def p[X](x: X) = { println(x); x }
