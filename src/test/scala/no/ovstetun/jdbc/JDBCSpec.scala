@@ -38,7 +38,7 @@ class JDBCSpec extends Specification with AroundExample with DBSupport {
 
       val rs = pstmt.getGeneratedKeys
       rs.next()
-      rs.getInt(1) must beGreaterThan(1)
+      rs.getInt(1) must beGreaterThan(0)
     }
   }
 }
