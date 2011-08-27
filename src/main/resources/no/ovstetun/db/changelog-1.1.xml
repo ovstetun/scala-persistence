@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+  <changeSet id="1" author="trondmarius" >
+    <createTable tableName="artists">
+      <column name="id" autoIncrement="true" type="int">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="biography" type="text"/>
+      <column name="maingenre" type="int"/>
+      <column name="founded" type="date"/>
+      <column name="split" type="date"/>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>
