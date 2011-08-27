@@ -1,16 +1,16 @@
 package no.ovstetun.jpa
 
-import javax.persistence.Persistence
 import org.specs2.mutable.{After, Specification}
 import java.sql.Connection
+import javax.persistence.Persistence
 import org.specs2.specification.{Step, Fragments}
 
 trait BaseJPASpec extends Specification {
   lazy val emf = Persistence.createEntityManagerFactory("pu")
 
-  override def map(fs: =>Fragments) = fs ^ Step(close)
+  override def map(fs: =>Fragments) = fs ^ Step(closeEMF)
 
-  def close {
+  def closeEMF {
     emf.close()
   }
 
@@ -22,6 +22,7 @@ trait BaseJPASpec extends Specification {
 
     def after {
       em.getTransaction.rollback()
+      em.close()
     }
   }
 }
