@@ -8,9 +8,9 @@ import org.specs2.specification.{Step, Fragments}
 trait BaseJPASpec extends Specification {
   lazy val emf = Persistence.createEntityManagerFactory("pu")
 
-  override def map(fs: =>Fragments) = Step({}) ^ fs ^ Step(close)
+  override def map(fs: =>Fragments) = fs ^ Step(close)
 
-  def close = {
+  def close {
     emf.close()
   }
 
