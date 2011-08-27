@@ -23,16 +23,16 @@ class JDBCSpec extends Specification with AroundExample with DBSupport {
     "run a count" in {
       loadData
 
-      val q = "SELECT count(*) from USERS"
+      val q = "SELECT count(*) from ARTISTS"
       val res = stmt.executeQuery(q)
       res.next() must beTrue
       res.getInt(1) must_== 4
     }
     "perform an insert" in {
-      val in = "INSERT INTO users(firstname, lastname) VALUES (?,?)"
+      val in = "INSERT INTO ARTISTS(name, biography) VALUES (?,?)"
       val pstmt = con.prepareStatement(in, Statement.RETURN_GENERATED_KEYS)
-      pstmt.setString(1, "bob")
-      pstmt.setString(2, "bobson")
+      pstmt.setString(1, "Tool")
+      pstmt.setString(2, "bla bla bla...")
 
       pstmt.executeUpdate() must_== 1
 
