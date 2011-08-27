@@ -17,7 +17,7 @@ class UserSquerylSpec extends Specification with DBSupport with AroundExample {
   def around[T <% Result](t: => T) = transaction {
     val res = t
 
-    Session.currentSession.connection.rollback
+    Session.currentSession.connection.rollback()
 
     res
   }
@@ -74,9 +74,20 @@ class UserSquerylSpec extends Specification with DBSupport with AroundExample {
       tm.id must_!= 0
       tm.isPersisted must_== true
     }
-    "delete user" in {
-      users.insert(new User("Trond", "Ovstetun"))
-      users.deleteWhere(u => u.id != 0) must_== 0
+    "delete user by key" in {
+      val tm = users.insert(new User("Trond", "Ovstetun"))
+      tm.id must_!= 0
+      users.delete(tm.id) must beTrue
+    }
+    "delete user by query on id" in {
+      val tm = users.insert(new User("Trond", "Ovstetun"))
+      users.deleteWhere(_.id === tm.id) must_== 1
+    }
+    "delete user by query on name" in {
+      val tm = users.insert(new User("Trond", "Ovstetun"))
+      users.deleteWhere(_.firstname === "Petter") must_== 0
+      users.deleteWhere(_.firstname === "trond") must_== 0
+      users.deleteWhere(_.firstname === "Trond") must_== 1
     }
   }
 
