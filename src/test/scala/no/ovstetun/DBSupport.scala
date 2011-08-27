@@ -23,8 +23,11 @@ trait DBSupport {
   def loadData(implicit con:Connection) {
     val dbConn = new DatabaseConnection(con)
     val dataLoader = new FlatXmlDataFileLoader(Map[String, String]("[null]" -> null))
-    val dataset = dataLoader.load("/data.xml")
+    val files = List("/data.xml", "/artists.xml")
 
-    DatabaseOperation.CLEAN_INSERT.execute(dbConn, dataset)
+    for (f <- files) {
+      val dataset = dataLoader.load(f)
+      DatabaseOperation.CLEAN_INSERT.execute(dbConn, dataset)
+    }
   }
 }

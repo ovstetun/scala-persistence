@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+  <artists id="1001" name="Tool" biography="" maingenre="1" founded="1990-01-02" split="[null]"/>
+  <artists id="1002" name="Pink Floyd" biography="" maingenre="7" founded="1965-01-20" split="2005-01-20"/>
+  <artists id="1003" name="Arcade Fire" biography="" maingenre="3" founded="2003-06-10" split="[null]"/>
+  <artists id="1004" name="Jay-Z" biography="" maingenre="5" founded="1969-12-04" split="[null]"/>
+</dataset>
