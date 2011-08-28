@@ -82,7 +82,9 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       q.setParams("name" -> "Jay-Z")
       val jz = q.getSingleResult()
       jz.id must_== 1004
-      jz.maingenre must_== Genre.Rap
+
+      q.findAll must contain(jz)
+      q.findOne must_== Some(jz)
     }
   }
 
