@@ -5,4 +5,53 @@
   <artists id="1002" name="Pink Floyd" biography="" maingenre="7" founded="1965-01-20" split="2005-01-20"/>
   <artists id="1003" name="Arcade Fire" biography="" maingenre="3" founded="2003-06-10" split="[null]"/>
   <artists id="1004" name="Jay-Z" biography="" maingenre="5" founded="1969-12-04" split="[null]"/>
+
+  <persons id="1001" firstname="Maynard James" lastname="Keenan" biography="[null]"/>
+  <persons id="1002" firstname="Adam" lastname="Jones" biography="[null]"/>
+  <persons id="1003" firstname="Paul" lastname="d'Amour" biography="[null]"/>
+  <persons id="1004" firstname="Danny" lastname="Carey" biography="[null]"/>
+  <person_artist person_id="1001" artist_id="1001"/>
+  <person_artist person_id="1002" artist_id="1001"/>
+  <person_artist person_id="1003" artist_id="1001"/>
+  <person_artist person_id="1004" artist_id="1001"/>
+
+  <persons id="1005" firstname="Roger" lastname="Waters" biography="[null]"/>
+  <persons id="1006" firstname="Syd" lastname="Barret" biography="[null]"/>
+  <persons id="1007" firstname="Richard" lastname="Wright" biography="[null]"/>
+  <persons id="1008" firstname="Nick" lastname="Mason" biography="[null]"/>
+  <persons id="1009" firstname="David" lastname="Gilmour" biography="[null]"/>
+  <persons id="1010" firstname="Bob" lastname="Klose" biography="[null]"/>
+  <person_artist person_id="1005" artist_id="1002"/>
+  <person_artist person_id="1006" artist_id="1002"/>
+  <person_artist person_id="1007" artist_id="1002"/>
+  <person_artist person_id="1008" artist_id="1002"/>
+  <person_artist person_id="1009" artist_id="1002"/>
+  <person_artist person_id="1010" artist_id="1002"/>
+
+  <persons id="1011" firstname="Richard" lastname="Parry" biography="[null]"/>
+  <persons id="1012" firstname="Win" lastname="Butler" biography="[null]"/>
+  <persons id="1013" firstname="Tim" lastname="Kingsbury" biography="[null]"/>
+  <persons id="1014" firstname="Howard" lastname="Bilerman" biography="[null]"/>
+  <persons id="1015" firstname="Regine" lastname="Chassagne" biography="[null]"/>
+  <persons id="1016" firstname="Will" lastname="Butler" biography="[null]"/>
+  <persons id="1017" firstname="Brendan" lastname="Reed" biography="[null]"/>
+  <persons id="1018" firstname="Jeremy" lastname="Gara" biography="[null]"/>
+  <persons id="1019" firstname="Josh" lastname="Deu" biography="[null]"/>
+  <persons id="1020" firstname="Myles" lastname="Broscoe" biography="[null]"/>
+  <persons id="1021" firstname="Sarah" lastname="Neufeld" biography="[null]"/>
+  <person_artist person_id="1011" artist_id="1003"/>
+  <person_artist person_id="1012" artist_id="1003"/>
+  <person_artist person_id="1013" artist_id="1003"/>
+  <person_artist person_id="1014" artist_id="1003"/>
+  <person_artist person_id="1015" artist_id="1003"/>
+  <person_artist person_id="1016" artist_id="1003"/>
+  <person_artist person_id="1017" artist_id="1003"/>
+  <person_artist person_id="1018" artist_id="1003"/>
+  <person_artist person_id="1019" artist_id="1003"/>
+  <person_artist person_id="1020" artist_id="1003"/>
+  <person_artist person_id="1021" artist_id="1003"/>
+
+  <persons id="1022" firstname="Shawn" lastname="Carter" biography="[null]"/>
+  <person_artist person_id="1022" artist_id="1004"/>
+
 </dataset>

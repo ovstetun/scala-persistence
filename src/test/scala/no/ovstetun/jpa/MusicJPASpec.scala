@@ -39,11 +39,13 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       val jz = jzq.getSingleResult
       jz.id must_== 1004
       jz.maingenre must_== Genre.Rap
+      jz.persons.size() must_== 1
     }
-    "find by id returns null and Artist with its albums" in new tdata {
+    "find by id returns null and Artist with its albums and persons" in new tdata {
       em.find(classOf[Artist], 999) must_== null
       var tool :Artist = em.find(classOf[Artist], 1001)
       tool.albums.size() must_== 4
+      tool.persons.size() must_== 4
     }
     "retrieve all artists is java list" in new tdata {
       val q = em.createQuery("SELECT a FROM Artist a", classOf[Artist])

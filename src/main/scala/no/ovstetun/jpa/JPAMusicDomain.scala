@@ -30,7 +30,13 @@ class Artist {
 
   @OneToMany(orphanRemoval = true)
   @JoinColumn(name = "artist_id")
-  var albums: jList[Album] = _
+  var albums : jList[Album] = _
+
+  @ManyToMany
+  @JoinTable(name = "person_artist",
+    joinColumns = Array(new JoinColumn(name = "artist_id")),
+    inverseJoinColumns = Array(new JoinColumn(name = "person_id")))
+  var persons : jList[Person] = _
 }
 
 @Entity
@@ -48,4 +54,17 @@ class Album {
 //  @ManyToOne
 //  @JoinColumn(name = "artist_id", nullable = false)
 //  var artist : Artist = _
+}
+
+@Entity
+@Table(name = "persons")
+class Person {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  var id : Int = _
+  var firstname : String = _
+  var lastname : String = _
+
+  @ManyToMany(mappedBy = "persons")
+  var artists : jList[Artist] = _
 }

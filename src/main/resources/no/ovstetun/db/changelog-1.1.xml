@@ -36,5 +36,30 @@
     <addForeignKeyConstraint baseTableName="albums" baseColumnNames="artist_id" constraintName="albums_artists_fk"
                              referencedTableName="artists" referencedColumnNames="id"/>
   </changeSet>
+  <changeSet id="3" author="trondmarius">
+    <createTable tableName="persons">
+      <column name="id" type="int" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="firstname" type="varchar(255)"/>
+      <column name="lastname" type="varchar(255)"/>
+      <column name="biography" type="text"/>
+    </createTable>
+    <createTable tableName="person_artist">
+      <column name="artist_id" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="person_id" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="person_artist" columnNames="person_id, artist_id" />
+    <addForeignKeyConstraint baseTableName="person_artist" baseColumnNames="person_id"
+                             constraintName="person_artist_p_fk" referencedTableName="persons"
+                             referencedColumnNames="id"/>
+    <addForeignKeyConstraint baseTableName="person_artist" baseColumnNames="artist_id"
+                             constraintName="person_artist_a_fk" referencedTableName="artists"
+                             referencedColumnNames="id"/>
+  </changeSet>
 
 </databaseChangeLog>
