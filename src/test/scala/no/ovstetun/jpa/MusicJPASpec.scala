@@ -57,6 +57,9 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       rockers.size must_== 1
       others.size must_== 3
     }
+    "count all albums" in new tdata {
+      em.createQuery("SELECT count(a) FROM Album a", classOf[Long]).getSingleResult must_== 24
+    }
   }
   "Music database using ScalaEntityManager (RichJPA)" should {
     "find by id returns None and Some using scalajpa" in new tdata {

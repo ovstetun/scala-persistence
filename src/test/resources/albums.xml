@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <dataset>
+  <!-- TOOL -->
   <albums id="1001" name="Undertow" release="1993-10-01" rating="[null]" artist_id="1001"/>
   <albums id="1002" name="Ænima" release="1996-10-01" rating="[null]" artist_id="1001"/>
   <albums id="1003" name="Lateralus" release="2001-05-15" rating="[null]" artist_id="1001"/>
   <albums id="1004" name="10000 Days" release="2006-05-02" rating="[null]" artist_id="1001"/>
+
+  <!-- Pink Floyd -->
+  <albums id="1005" name="The Piper at the Gates of Dawn" release="1967-08-05" rating="[null]" artist_id="1002"/>
+  <albums id="1006" name="A Saucerful of Secrets" release="1968-06-29" rating="[null]" artist_id="1002"/>
+  <albums id="1007" name="More" release="1969-07-27" rating="[null]" artist_id="1002"/>
+  <albums id="1008" name="Ummagumma" release="1969-10-25" rating="[null]" artist_id="1002"/>
+  <albums id="1009" name="Atom Heart Mother" release="1970-10-05" rating="[null]" artist_id="1002"/>
+  <albums id="1010" name="Meddle" release="1970-11-11" rating="[null]" artist_id="1002"/>
+  <albums id="1011" name="Obscured by Clouds" release="1972-06-03" rating="[null]" artist_id="1002"/>
+  <albums id="1012" name="The Dark Side of the Moon" release="1973-03-24" rating="[null]" artist_id="1002"/>
+  <albums id="1013" name="Wish You Were Here" release="1975-09-15" rating="[null]" artist_id="1002"/>
+  <albums id="1014" name="Animals" release="1977-01-23" rating="[null]" artist_id="1002"/>
+  <albums id="1015" name="The Wall" release="1979-11-30" rating="[null]" artist_id="1002"/>
+  <albums id="1016" name="The Final Cut" release="1983-03-21" rating="[null]" artist_id="1002"/>
+  <albums id="1017" name="A Momentary Lapse of Reason" release="1987-09-08" rating="[null]" artist_id="1002"/>
+  <albums id="1018" name="Delicate Sound of Thunder" release="1988-11-22" rating="[null]" artist_id="1002"/>
+  <albums id="1019" name="The Division Bell" release="1994-03-30" rating="[null]" artist_id="1002"/>
+  <albums id="1020" name="Pulse" release="1995-06-13" rating="[null]" artist_id="1002"/>
+
+  <!-- Arcade Fire -->
+  <albums id="1021" name="Funeral" release="2004-10-14" rating="[null]" artist_id="1003"/>
+  <albums id="1022" name="Neon Bible" release="2007-03-06" rating="[null]" artist_id="1003"/>
+  <albums id="1023" name="The Suburbs" release="2010-05-02" rating="[null]" artist_id="1003"/>
+  <albums id="1024" name="Scenes from the Suburbs" release="2011-05-02" rating="[null]" artist_id="1003"/>
+
+  <!-- Jay-Z (no albums registered) -->
+  <!--<albums id="1018" name="" release="2006-05-02" rating="[null]" artist_id="1004"/>-->
 </dataset>
