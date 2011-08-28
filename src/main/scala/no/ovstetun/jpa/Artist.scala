@@ -23,3 +23,16 @@ class Artist {
   @Convert("GenreConverter")
   var maingenre : Genre.Value = Genre.Rock
 }
+
+@Entity
+@Table(name = "albums")
+class Album {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  var id : Int = _
+  var name : Int = _
+  @Temporal(value = TemporalType.DATE)
+  var release : Date = _
+  var rating : Int = _
+}

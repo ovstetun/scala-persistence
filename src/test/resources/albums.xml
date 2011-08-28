@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+  <albums id="1001" name="Undertow" release="1993-10-01" rating="[null]" artist_id="1001"/>
+  <albums id="1002" name="Ænima" release="1996-10-01" rating="[null]" artist_id="1001"/>
+  <albums id="1003" name="Lateralus" release="2001-05-15" rating="[null]" artist_id="1001"/>
+  <albums id="1004" name="10000 Days" release="2006-05-02" rating="[null]" artist_id="1001"/>
+</dataset>

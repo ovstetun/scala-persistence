@@ -19,5 +19,22 @@
       <column name="split" type="date"/>
     </createTable>
   </changeSet>
+  <changeSet id="2" author="trondmarius">
+    <createTable tableName="albums">
+      <column name="id" autoIncrement="true" type="int">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="release" type="date"/>
+      <column name="rating" type="int"/>
+      <column name="artist_id" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="albums" baseColumnNames="artist_id" constraintName="albums_artists_fk"
+                             referencedTableName="artists" referencedColumnNames="id"/>
+  </changeSet>
 
 </databaseChangeLog>
