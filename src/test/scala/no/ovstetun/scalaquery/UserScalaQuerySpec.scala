@@ -10,7 +10,7 @@ import org.specs2.mutable._
 import org.specs2.execute._
 import org.specs2.specification._
 
-class UserSpec extends Specification with AroundExample with DBSupport {
+class UserScalaQuerySpec extends Specification with AroundExample with DBSupport {
   lazy val db = Database.forDataSource(ds)
   implicit def conn = threadLocalSession.conn
 

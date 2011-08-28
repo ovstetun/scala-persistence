@@ -1,7 +1,7 @@
 package no.ovstetun
 package jpa
 
-class JPASpec extends BaseJPASpec with DBSupport {
+class UserJPASpec extends BaseJPASpec with DBSupport {
   "jpa" should {
     "be able to count" in new t {
       loadData

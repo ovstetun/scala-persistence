@@ -7,7 +7,7 @@ import java.sql.Statement
 import org.specs2.specification.{AroundExample, Around}
 
 
-class JDBCSpec extends Specification with AroundExample with DBSupport {
+class MusicJDBCSpec extends Specification with AroundExample with DBSupport {
   implicit lazy val con = ds.getConnection
   def stmt = con.createStatement()
 
