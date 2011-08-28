@@ -1,9 +1,11 @@
 package no.ovstetun
 package jpa
 
-import javax.persistence.GeneratedValue._
+import Genre._
+
 import javax.persistence._
 import java.util.Date
+import java.util.{List => jList}
 import org.eclipse.persistence.annotations.{Convert, Converter}
 
 @Entity
@@ -21,7 +23,14 @@ class Artist {
 //  @Enumerated
   @Converter(name = "GenreConverter", converterClass = classOf[GenreConverter])
   @Convert("GenreConverter")
-  var maingenre : Genre.Value = Genre.Rock
+  var maingenre : Genre = Genre.Rock
+
+//  @OneToMany(orphanRemoval = true, mappedBy = "artist")
+//  var albums: jList[Album] = _
+
+  @OneToMany(orphanRemoval = true)
+  @JoinColumn(name = "artist_id")
+  var albums: jList[Album] = _
 }
 
 @Entity
@@ -31,8 +40,12 @@ class Album {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   var id : Int = _
-  var name : Int = _
+  var name : String = _
   @Temporal(value = TemporalType.DATE)
   var release : Date = _
   var rating : Int = _
+
+//  @ManyToOne
+//  @JoinColumn(name = "artist_id", nullable = false)
+//  var artist : Artist = _
 }

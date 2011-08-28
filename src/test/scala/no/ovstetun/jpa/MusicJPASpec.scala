@@ -40,9 +40,10 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       jz.id must_== 1004
       jz.maingenre must_== Genre.Rap
     }
-    "find by id returns null and Artist" in new tdata {
+    "find by id returns null and Artist with its albums" in new tdata {
       em.find(classOf[Artist], 999) must_== null
       var tool :Artist = em.find(classOf[Artist], 1001)
+      tool.albums.size() must_== 4
     }
     "retrieve all artists is java list" in new tdata {
       val q = em.createQuery("SELECT a FROM Artist a", classOf[Artist])
@@ -75,6 +76,13 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       val (rockers, others) = artists.partition(_.maingenre == Genre.Rock)
       rockers.size must_== 1
       others.size must_== 3
+    }
+    "find by name is nicer" in new tdata {
+      val q = RichEM.createQuery[Artist]("SELECT a FROM Artist a WHERE a.name = :name")
+      q.setParams("name" -> "Jay-Z")
+      val jz = q.getSingleResult()
+      jz.id must_== 1004
+      jz.maingenre must_== Genre.Rap
     }
   }
 
