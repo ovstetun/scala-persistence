@@ -3,6 +3,8 @@ package jpa
 
 import java.text.SimpleDateFormat
 import java.util.Date
+import javax.persistence.EntityManager
+import org.scala_libs.jpa.{ScalaEMFactory, ThreadLocalEM, LocalEMF, ScalaEntityManager}
 
 class MusicJPASpec extends BaseJPASpec with DBSupport {
   trait tdata extends t {
@@ -38,8 +40,9 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       jz.id must_== 1004
       jz.maingenre must_== Genre.Rap
     }
-    "find by id should returns null for None" in new tdata {
+    "find by id returns null and Artist" in new tdata {
       em.find(classOf[Artist], 999) must_== null
+      var tool :Artist = em.find(classOf[Artist], 1001)
     }
     "retrieve all artists is java list" in new tdata {
       val q = em.createQuery("SELECT a FROM Artist a", classOf[Artist])
@@ -48,6 +51,22 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
 
       import scala.collection.JavaConversions._
       val scalaArtists = q.getResultList
+      artists.count(_ => true) must_== 4
+
+      val (rockers, others) = artists.partition(_.maingenre == Genre.Rock)
+      rockers.size must_== 1
+      others.size must_== 3
+    }
+  }
+  "Music database using ScalaEntityManager (RichJPA)" should {
+    "find by id returns None and Some using scalajpa" in new tdata {
+      RichEM.find(classOf[Artist], 999) must beNone
+      RichEM.find(classOf[Artist], 1001) must beSome[Artist]
+      RichEM.find(classOf[Artist], 1002) must beSome[Artist]
+    }
+    "retrieve all artists is a scala collection" in new tdata {
+      val q = RichEM.createQuery[Artist]("SELECT a FROM Artist a")
+      val artists = q.getResultList()
       artists.count(_ => true) must_== 4
 
       val (rockers, others) = artists.partition(_.maingenre == Genre.Rock)
