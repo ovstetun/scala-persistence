@@ -3,8 +3,6 @@ package jpa
 
 import java.text.SimpleDateFormat
 import java.util.Date
-import javax.persistence.EntityManager
-import org.scala_libs.jpa.{ScalaEMFactory, ThreadLocalEM, LocalEMF, ScalaEntityManager}
 
 class MusicJPASpec extends BaseJPASpec with DBSupport {
   trait tdata extends t {
@@ -12,9 +10,9 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
   }
 
   "Music database using JPA" should {
-    "count empty table" in new t {
+    "run a count for a full table" in new tdata {
       val q = em.createQuery("SELECT COUNT(a) FROM Artist a", classOf[Long])
-      q.getSingleResult must_== 0
+      q.getSingleResult must_== 4
     }
     "assign an id to persisted artist on flush" in new t {
       val a = new Artist
@@ -31,6 +29,19 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       val tool = em.find(classOf[Artist], 1001)
       tool.name must_== "Tool"
       tool.maingenre must_== Genre.Rock
+    }
+    "perform an update" in new tdata {
+      val tool = em.find(classOf[Artist], 1001)
+      tool.name must_== "Tool"
+      tool.name = "Updated..."
+
+      // emulate the ending of a transaction
+      em.flush()
+      em.clear()
+
+      val updated = em.find(classOf[Artist], 1001)
+      updated.name must_== "Updated..."
+      updated must not beTheSameAs(tool)
     }
     "retrieve Jay-Z using a query by name" in new tdata {
       val jzq = em.createQuery("SELECT a FROM Artist a WHERE a.name = :name", classOf[Artist])
@@ -65,6 +76,11 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
     }
   }
   "Music database using ScalaEntityManager (RichJPA)" should {
+    "count artists" in new tdata {
+      val q = RichEM.createQuery[Long]("SELECT COUNT(a) FROM Artist a")
+      q.findOne must_== Some(4)
+      q.getSingleResult() must_== 4
+    }
     "find by id returns None and Some using scalajpa" in new tdata {
       RichEM.find(classOf[Artist], 999) must beNone
       RichEM.find(classOf[Artist], 1001) must beSome[Artist]
@@ -88,6 +104,26 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       q.findAll must contain(jz)
       q.findOne must_== Some(jz)
     }
+  }
+  "aggregate queries and such" should {
+    "find artists with more than four albums" in new tdata {
+      val q = em.createQuery("SELECT a FROM Artist a WHERE size(a.albums) > 4", classOf[Artist])
+      val artists = q.getResultList
+      artists.size must_== 1
+    }
+    "find artists without albums" in new tdata {
+//      val q = em.createQuery("SELECT a FROM Artist a WHERE size(a.albums) = 0", classOf[Artist])
+      val q = em.createQuery("SELECT a FROM Artist a WHERE a.albums IS EMPTY", classOf[Artist])
+      q.getResultList.size must_== 1
+    }
+    "find all Rock bands using Genre.Rock Scala Enum" in new tdata {
+      val q = RichEM.createQuery[Artist]("SELECT a FROM Artist a WHERE a.maingenre = :genre")
+      q.setParams("genre" -> Genre.Rock)
+      
+      q.getResultList.size must_== 1
+    }
+    "find persons involved in more than one band" in pending
+    "find total length of album" in pending
   }
 
   implicit def str2date(dateStr : String) : Date = {
