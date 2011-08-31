@@ -38,9 +38,9 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
     "find row by id" in new tdata {
       val q = Artists.createFinderBy(_.id)
       q(1001).firstOption must beSome
-      q(1001).first must_== (1001, "Tool", "", date("1990-01-02"), None)
+      q(1001).first must_== (1001, "Tool", "", Genre.Rock, date("1990-01-02"), None)
 
-      q.first(1001) must_== (1001, "Tool", "", date("1990-01-02"), None)
+      q.first(1001) must_== (1001, "Tool", "", Genre.Rock, date("1990-01-02"), None)
       q.firstOption(1001) must beSome
 
       q.firstOption(999) must beNone

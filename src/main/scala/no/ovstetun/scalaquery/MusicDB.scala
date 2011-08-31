@@ -1,4 +1,5 @@
-package no.ovstetun.scalaquery
+package no.ovstetun
+package scalaquery
 
 import org.scalaquery.ql._
 import extended.{ExtendedProfile, ExtendedTable => Table}
@@ -8,14 +9,20 @@ trait MusicDB {
   self : ExtendedProfile =>
   import self.Implicit._
 
-  object Artists extends Table[(Int, String, String, Date, Option[Date])]("ARTISTS") {
+  implicit object GenreMapper extends MappedTypeMapper[Genre.Genre, Int] with BaseTypeMapper[Genre.Genre] {
+    def map(t: Genre.Genre) = t.id
+    def comap(u: Int) = Genre(u)
+  }
+
+  object Artists extends Table[(Int, String, String, Genre.Genre, Date, Option[Date])]("ARTISTS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
     def name = column[String]("NAME")
     def biography = column[String]("BIOGRAPHY")
+    def maingenre = column[Genre.Genre]("MAINGENRE")
     def founded = column[Date]("FOUNDED")
     def split = column[Option[Date]]("SPLIT")
 
-    def * = id ~ name ~ biography ~ founded ~ split
+    def * = id ~ name ~ biography ~ maingenre ~ founded ~ split
   }
   object Albums extends Table[(Int, String, Date, Option[Int], Int)]("ALBUMS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
@@ -57,4 +64,5 @@ trait MusicDB {
 
     def * = artist_id ~ person_id
   }
+
 }
