@@ -40,6 +40,19 @@ class Artist {
 }
 
 @Entity
+@Table(name = "persons")
+class Person {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  var id : Int = _
+  var firstname : String = _
+  var lastname : String = _
+
+  @ManyToMany(mappedBy = "persons")
+  var artists : jList[Artist] = _
+}
+
+@Entity
 @Table(name = "albums")
 class Album {
 
@@ -54,17 +67,25 @@ class Album {
 //  @ManyToOne
 //  @JoinColumn(name = "artist_id", nullable = false)
 //  var artist : Artist = _
+
+  @OneToMany(orphanRemoval = true)
+  @JoinColumn(name = "album_id")
+  @OrderBy("")
+  var songs : jList[Song] = _
+
+  def duration : Int = {
+    import scala.collection.JavaConversions._
+    songs.foldLeft(0)(_ + _.duration)
+  }
 }
 
 @Entity
-@Table(name = "persons")
-class Person {
+@Table(name = "songs")
+class Song {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   var id : Int = _
-  var firstname : String = _
-  var lastname : String = _
-
-  @ManyToMany(mappedBy = "persons")
-  var artists : jList[Artist] = _
+  var name : String = _
+  var duration : Int = _
+  var tracknumber : Int = _
 }

@@ -12,7 +12,7 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
   "Music database using JPA" should {
     "run a count for a full table" in new tdata {
       val q = em.createQuery("SELECT COUNT(a) FROM Artist a", classOf[Long])
-      q.getSingleResult must_== 4
+      q.getSingleResult must_== 5
     }
     "assign an id to persisted artist on flush" in new t {
       val a = new Artist
@@ -61,14 +61,14 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
     "retrieve all artists is java list" in new tdata {
       val q = em.createQuery("SELECT a FROM Artist a", classOf[Artist])
       val artists : java.util.List[Artist] = q.getResultList
-      artists.size must_== 4
+      artists.size must_== 5
 
       import scala.collection.JavaConversions._
       val scalaArtists = q.getResultList
-      artists.count(_ => true) must_== 4
+      artists.count(_ => true) must_== 5
 
       val (rockers, others) = artists.partition(_.maingenre == Genre.Rock)
-      rockers.size must_== 1
+      rockers.size must_== 2
       others.size must_== 3
     }
     "count all albums" in new tdata {
@@ -78,8 +78,8 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
   "Music database using ScalaEntityManager (RichJPA)" should {
     "count artists" in new tdata {
       val q = RichEM.createQuery[Long]("SELECT COUNT(a) FROM Artist a")
-      q.findOne must_== Some(4)
-      q.getSingleResult() must_== 4
+      q.findOne must_== Some(5)
+      q.getSingleResult() must_== 5
     }
     "find by id returns None and Some using scalajpa" in new tdata {
       RichEM.find(classOf[Artist], 999) must beNone
@@ -89,10 +89,10 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
     "retrieve all artists is a scala collection" in new tdata {
       val q = RichEM.createQuery[Artist]("SELECT a FROM Artist a")
       val artists = q.getResultList()
-      artists.count(_ => true) must_== 4
+      artists.count(_ => true) must_== 5
 
       val (rockers, others) = artists.partition(_.maingenre == Genre.Rock)
-      rockers.size must_== 1
+      rockers.size must_== 2
       others.size must_== 3
     }
     "find by name is nicer" in new tdata {
@@ -112,18 +112,57 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       artists.size must_== 1
     }
     "find artists without albums" in new tdata {
-//      val q = em.createQuery("SELECT a FROM Artist a WHERE size(a.albums) = 0", classOf[Artist])
-      val q = em.createQuery("SELECT a FROM Artist a WHERE a.albums IS EMPTY", classOf[Artist])
-      q.getResultList.size must_== 1
+      val q_size = em.createQuery("SELECT a FROM Artist a WHERE size(a.albums) = 0", classOf[Artist])
+      q_size.getResultList.size must_== 2
+
+      val q_empty = em.createQuery("SELECT a FROM Artist a WHERE a.albums IS EMPTY", classOf[Artist])
+      q_empty.getResultList.size must_== 2
     }
     "find all Rock bands using Genre.Rock Scala Enum" in new tdata {
       val q = RichEM.createQuery[Artist]("SELECT a FROM Artist a WHERE a.maingenre = :genre")
       q.setParams("genre" -> Genre.Rock)
       
-      q.getResultList.size must_== 1
+      q.getResultList.size must_== 2
     }
-    "find persons involved in more than one band" in pending
-    "find total length of album" in pending
+    "find persons involved in more than one band" in new tdata {
+      val q = RichEM.createQuery[Person]("SELECT p FROM Person p WHERE size(p.artists) > 1")
+      q.findAll.size must_== 1
+
+      val mjk = RichEM.find(classOf[Person], 1001)
+
+      q.findOne must_== mjk
+    }
+    "find total length of album from a query" in new tdata {
+      val q = RichEM.createQuery[Long]("SELECT sum(s.duration) FROM Album a JOIN a.songs s WHERE a.id = :album")
+      q.setParams("album" -> 1004)
+      q.findOne must_== Some(4545)
+      q.getSingleResult must_== 4545L
+    }
+    "find total length of album by traversal" in new tdata {
+      var aenima = em.find(classOf[Album], 1004)
+      aenima.duration must_== 4545
+    }
+    "order albums according to length" in new tdata {
+      val q = RichEM.createQuery[(Artist, Long)](
+        """
+        SELECT a, sum(s.duration)
+        FROM Album a JOIN a.songs s
+        GROUP BY a
+        ORDER BY sum(s.duration) DESC
+        """)
+      val all = q.findAll
+      all.size must_== 2
+
+      val q2 = RichEM.createQuery[(Artist, Long)](
+        """
+        SELECT a, sum(s.duration)
+        FROM Album a LEFT JOIN a.songs s
+        GROUP BY a
+        ORDER BY sum(s.duration) DESC
+        """)
+      val all2 = q2.findAll
+      all2.size must_== 24
+    }
   }
 
   implicit def str2date(dateStr : String) : Date = {

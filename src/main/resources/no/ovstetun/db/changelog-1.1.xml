@@ -61,5 +61,20 @@
                              constraintName="person_artist_a_fk" referencedTableName="artists"
                              referencedColumnNames="id"/>
   </changeSet>
+  <changeSet id="4" author="trondmarius">
+    <createTable tableName="songs">
+      <column name="id" type="int" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)"/>
+      <column name="duration" type="int"/>
+      <column name="tracknumber" type="int"/>
+      <column name="album_id" type="int"/>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="songs" baseColumnNames="album_id" constraintName="song_album_fk"
+                             referencedTableName="albums"
+                             referencedColumnNames="id"/>
+    <addUniqueConstraint tableName="songs" columnNames="album_id, tracknumber"/>
+  </changeSet>
 
 </databaseChangeLog>

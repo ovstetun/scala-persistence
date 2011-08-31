@@ -5,6 +5,7 @@
   <artists id="1002" name="Pink Floyd" biography="" maingenre="7" founded="1965-01-20" split="2005-01-20"/>
   <artists id="1003" name="Arcade Fire" biography="" maingenre="3" founded="2003-06-10" split="[null]"/>
   <artists id="1004" name="Jay-Z" biography="" maingenre="5" founded="1969-12-04" split="[null]"/>
+  <artists id="1005" name="A Perfect Circle" biography="" maingenre="1" founded="1999-08-15" split="[null]"/>
 
   <persons id="1001" firstname="Maynard James" lastname="Keenan" biography="[null]"/>
   <persons id="1002" firstname="Adam" lastname="Jones" biography="[null]"/>
@@ -14,6 +15,8 @@
   <person_artist person_id="1002" artist_id="1001"/>
   <person_artist person_id="1003" artist_id="1001"/>
   <person_artist person_id="1004" artist_id="1001"/>
+
+  <person_artist person_id="1001" artist_id="1005"/>
 
   <persons id="1005" firstname="Roger" lastname="Waters" biography="[null]"/>
   <persons id="1006" firstname="Syd" lastname="Barret" biography="[null]"/>

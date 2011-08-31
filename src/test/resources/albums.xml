@@ -4,8 +4,34 @@
   <!-- TOOL -->
   <albums id="1001" name="Undertow" release="1993-10-01" rating="[null]" artist_id="1001"/>
   <albums id="1002" name="Ænima" release="1996-10-01" rating="[null]" artist_id="1001"/>
+
   <albums id="1003" name="Lateralus" release="2001-05-15" rating="[null]" artist_id="1001"/>
+  <songs id="1012" tracknumber="1" album_id="1003" name="The Grudge" duration="516"        />
+  <songs id="1013" tracknumber="2" album_id="1003" name="Eon Blue Apocalypse" duration="64"/>
+  <songs id="1014" tracknumber="3" album_id="1003" name="The Patient" duration="433"       />
+  <songs id="1015" tracknumber="4" album_id="1003" name="Mantra" duration="72"             />
+  <songs id="1016" tracknumber="5" album_id="1003" name="Schism" duration="407"            />
+  <songs id="1017" tracknumber="6" album_id="1003" name="Parabol" duration="184"           />
+  <songs id="1018" tracknumber="7" album_id="1003" name="Parabola" duration="363"          />
+  <songs id="1019" tracknumber="8" album_id="1003" name="Ticks and Leeches" duration="490"   />
+  <songs id="1020" tracknumber="9" album_id="1003" name="Lateralus" duration="564"         />
+  <songs id="1021" tracknumber="10" album_id="1003" name="Disposition" duration="286"      />
+  <songs id="1022" tracknumber="11" album_id="1003" name="Reflection" duration="667"       />
+  <songs id="1023" tracknumber="12" album_id="1003" name="Triad" duration="526"            />
+  <songs id="1024" tracknumber="13" album_id="1003" name="Faaip de Oiad" duration="159"    />
+
   <albums id="1004" name="10000 Days" release="2006-05-02" rating="[null]" artist_id="1001"/>
+  <songs id="1001" tracknumber="1"  album_id="1004" name="Vicarious" duration="426"/>
+  <songs id="1002" tracknumber="2"  album_id="1004" name="Jambi" duration="448"/>
+  <songs id="1003" tracknumber="3"  album_id="1004" name="Wings for Marie, Pt. 1" duration="371"/>
+  <songs id="1004" tracknumber="4"  album_id="1004" name="10,000 Days (Wings, Pt. 2)" duration="673"/>
+  <songs id="1005" tracknumber="5"  album_id="1004" name="The Pot" duration="381"/>
+  <songs id="1006" tracknumber="6"  album_id="1004" name="Lipan Conjuring" duration="71"/>
+  <songs id="1007" tracknumber="7"  album_id="1004" name="Lost Keys (Blame Hofmann)" duration="226"/>
+  <songs id="1008" tracknumber="8"  album_id="1004" name="Roseta Stoned" duration="671"/>
+  <songs id="1009" tracknumber="9"  album_id="1004" name="Intension" duration="441"/>
+  <songs id="1010" tracknumber="10" album_id="1004" name="Right in Two" duration="535"/>
+  <songs id="1011" tracknumber="11" album_id="1004" name="Viginti Tres" duration="302"/>
 
   <!-- Pink Floyd -->
   <albums id="1005" name="The Piper at the Gates of Dawn" release="1967-08-05" rating="[null]" artist_id="1002"/>
