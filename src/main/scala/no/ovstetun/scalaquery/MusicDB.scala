@@ -5,6 +5,9 @@ import org.scalaquery.ql._
 import extended.{ExtendedProfile, ExtendedTable => Table}
 import java.sql.Date
 
+
+case class Duration(mins:Int, secs:Int)
+
 trait MusicDB {
   self : ExtendedProfile =>
   import self.Implicit._
@@ -14,7 +17,11 @@ trait MusicDB {
 //    def comap(u: Int) = Genre(u)
 //  }
   implicit val genreMapper = MappedTypeMapper.base[Genre.Genre, Int](_.id, Genre(_))
-  
+  implicit val durationMapper = MappedTypeMapper.base[Duration, Int](
+    dur => dur.mins * 60 + dur.secs,
+    secs => Duration(secs / 60, secs % 60)
+  )
+
 
   object Artists extends Table[(Int, String, String, Genre.Genre, Date, Option[Date])]("ARTISTS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
@@ -37,15 +44,16 @@ trait MusicDB {
 
     def * = id ~ name ~ release ~ rating ~ artist_id
   }
-  object Songs extends Table[(Int, String, Int, Int, Int)]("SONGS") {
+  object Songs extends Table[(Int, String, Duration, Int, Int)]("SONGS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
     def name = column[String]("NAME", O NotNull)
-    def duration = column[Int]("DURATION")
+    def duration = column[Duration]("DURATION")
     def tracknumber = column[Int]("TRACKNUMBER")
     def album_id = column[Int]("ALBUM_ID")
 
     def album = foreignKey("songs_albums_fk", album_id, Albums)(_.id)
 
+    def x = id ~ name ~ duration
     def * = id ~ name ~ duration ~ tracknumber ~ album_id
   }
   object Persons extends Table[(Int, String, String, Option[String])]("PERSONS") {

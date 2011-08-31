@@ -46,6 +46,13 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       q.firstOption(999) must beNone
       q.first(999) must throwA[NoSuchElementException]
     }
+    "map duration" in new tdata {
+      val q = for (s <- Songs if s.id === 1001) yield s.x
+      q.first must_== (1001, "Vicarious", Duration(7,6))
+
+      val q2 = Songs.createFinderBy(_.id)
+      q2.first(1001) must_== (1001, "Vicarious", Duration(7,6), 1, 1004)
+    }
   }
 
   implicit def date(dateStr : String) : Date = {
