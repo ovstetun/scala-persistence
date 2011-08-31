@@ -53,6 +53,10 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val q2 = Songs.createFinderBy(_.id)
       q2.first(1001) must_== (1001, "Vicarious", Duration(7,6), 1, 1004)
     }
+    "sum duration" in new tdata {
+      val q = for (s <- Songs if s.album_id === 1004) yield s.duration.sum
+      q.first must_== Some(Duration(75, 45))
+    }
   }
 
   implicit def date(dateStr : String) : Date = {

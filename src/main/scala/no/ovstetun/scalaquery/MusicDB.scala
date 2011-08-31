@@ -17,10 +17,14 @@ trait MusicDB {
 //    def comap(u: Int) = Genre(u)
 //  }
   implicit val genreMapper = MappedTypeMapper.base[Genre.Genre, Int](_.id, Genre(_))
-  implicit val durationMapper = MappedTypeMapper.base[Duration, Int](
-    dur => dur.mins * 60 + dur.secs,
-    secs => Duration(secs / 60, secs % 60)
-  )
+//  implicit val durationMapper = MappedTypeMapper.base[Duration, Int](
+//    dur => dur.mins * 60 + dur.secs,
+//    secs => Duration(secs / 60, secs % 60)
+//  )
+  implicit object durationMapper extends MappedTypeMapper[Duration, Int] with BaseTypeMapper[Duration] with NumericTypeMapper {
+    def map(dur: Duration) = dur.mins * 60 + dur.secs
+    def comap(secs: Int) = Duration(secs / 60, secs % 60)
+  }
 
 
   object Artists extends Table[(Int, String, String, Genre.Genre, Date, Option[Date])]("ARTISTS") {
