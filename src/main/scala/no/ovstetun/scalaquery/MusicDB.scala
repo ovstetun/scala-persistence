@@ -9,10 +9,12 @@ trait MusicDB {
   self : ExtendedProfile =>
   import self.Implicit._
 
-  implicit object GenreMapper extends MappedTypeMapper[Genre.Genre, Int] with BaseTypeMapper[Genre.Genre] {
-    def map(t: Genre.Genre) = t.id
-    def comap(u: Int) = Genre(u)
-  }
+//  implicit object GenreMapper extends MappedTypeMapper[Genre.Genre, Int] with BaseTypeMapper[Genre.Genre] {
+//    def map(t: Genre.Genre) = t.id
+//    def comap(u: Int) = Genre(u)
+//  }
+  implicit val genreMapper = MappedTypeMapper.base[Genre.Genre, Int](_.id, Genre(_))
+  
 
   object Artists extends Table[(Int, String, String, Genre.Genre, Date, Option[Date])]("ARTISTS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
