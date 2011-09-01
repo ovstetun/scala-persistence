@@ -35,7 +35,7 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val i : Int = Query(Artists.count).first()
       i must_== 5
     }
-    "find row by id" in new tdata {
+    "find artist row by id" in new tdata {
       val q = Artists.createFinderBy(_.id)
       q(1001).firstOption must beSome
       q(1001).first must_== (1001, "Tool", "", Genre.Rock, date("1990-01-02"), None)
@@ -46,6 +46,19 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       q.firstOption(999) must beNone
       q.first(999) must throwA[NoSuchElementException]
     }
+    "insert single artist" in new tdata {
+      val i = Artists.i.insert(("Seigmen", "", Genre.Rock, date("1989-12-27"), Some(date("2008-06-22"))))
+      i must_== 1
+    }
+    "insert a batch of artists" in new tdata {
+      val artists = List(
+        ("Seigmen", "", Genre.Rock, date("1989-12-27"), Some(date("2008-06-22"))),
+        ("Muse", "", Genre.Rock, date("1994-06-01"), None),
+        ("Oslo Ess", "", Genre.Rock, date("2010-06-01"), None)
+      )
+      val i = Artists.i.insertAll(artists :_*)
+      i must beSome(3)
+    }
     "map duration" in new tdata {
       val q = for (s <- Songs if s.id === 1001) yield s.x
       q.first must_== (1001, "Vicarious", Duration(7,6))
@@ -53,7 +66,7 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val q2 = Songs.createFinderBy(_.id)
       q2.first(1001) must_== (1001, "Vicarious", Duration(7,6), 1, 1004)
     }
-    "sum duration" in new tdata {
+    "find total length of album from a query with mapping to Duration" in new tdata {
       val q = for (s <- Songs if s.album_id === 1004) yield s.duration.sum
       q.first must_== Some(Duration(75, 45))
     }

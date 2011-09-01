@@ -58,6 +58,7 @@ trait MusicDB {
     def split = column[Option[Date]]("SPLIT")
 
     def * = id ~ name ~ biography ~ maingenre ~ founded ~ split
+    def i = name ~ biography ~ maingenre ~ founded ~ split
   }
   object Albums extends Table[(Int, String, Date, Option[Rating], Int)]("ALBUMS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
@@ -67,7 +68,6 @@ trait MusicDB {
     def artist_id = column[Int]("ARTIST_ID")
 
     def artist = foreignKey("albums_artists_fk", artist_id, Artists)(_.id)
-
 
     def i = name ~ release ~ rating ~ artist_id
     def * = id ~ name ~ release ~ rating ~ artist_id
