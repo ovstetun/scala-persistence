@@ -57,6 +57,39 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val q = for (s <- Songs if s.album_id === 1004) yield s.duration.sum
       q.first must_== Some(Duration(75, 45))
     }
+    "map rating for album" in new tdata {
+      val q = Albums.createFinderBy(_.id)
+      q.first(1004) must_== (1004, "10000 Days", date("2006-05-02"), None, 1001)
+      q.first(1003) must_== (1003, "Lateralus", date("2001-05-15"), Some(Six), 1001)
+    }
+    "insert an album with case object as rating" in new tdata {
+      Albums.i.insert("lala", date("2006-05-02"), Some(Six), 1001) must_== 1
+      Albums.i.insert("lala2", date("2006-05-02"), None, 1001) must_== 1
+      Albums.i.insert("lala3", date("2006-05-02"), None, 1001) must_== 1
+
+      val q = Query(Albums.count)
+      q.first must_== 27
+
+      val q2 = Albums.filter(_.rating === Six.asInstanceOf[Rating])
+//      val q2 = for (a <- Albums if a.rating === Six.asInstanceOf[Rating]) yield a
+      val l2 = q2.list()
+
+      l2.size must_== 2
+
+//      val q3 = Albums.filter(_.rating === None.asInstanceOf[Option[Rating]])
+      val q3 = Albums.filter(_.rating === null.asInstanceOf[Option[Rating]])
+//      q3.selectStatement must_== ""
+      val l3 = q3.list
+      l3.size must_== 25
+
+    }
+    "query for persons with None" in new tdata {
+//      val q = Persons.filter(_.biography === None.asInstanceOf[Option[String]])
+      val q = Persons.filter(_.biography === null.asInstanceOf[Option[String]])
+//      q.selectStatement must_== ""
+      val l = q.list
+      l.size must_== 22
+    }
   }
 
   implicit def date(dateStr : String) : Date = {

@@ -5,7 +5,7 @@
   <albums id="1001" name="Undertow" release="1993-10-01" rating="[null]" artist_id="1001"/>
   <albums id="1002" name="Ænima" release="1996-10-01" rating="[null]" artist_id="1001"/>
 
-  <albums id="1003" name="Lateralus" release="2001-05-15" rating="[null]" artist_id="1001"/>
+  <albums id="1003" name="Lateralus" release="2001-05-15" rating="6" artist_id="1001"/>
   <songs id="1012" tracknumber="1" album_id="1003" name="The Grudge" duration="516"        />
   <songs id="1013" tracknumber="2" album_id="1003" name="Eon Blue Apocalypse" duration="64"/>
   <songs id="1014" tracknumber="3" album_id="1003" name="The Patient" duration="433"       />

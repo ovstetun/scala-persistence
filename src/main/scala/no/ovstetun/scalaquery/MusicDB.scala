@@ -8,6 +8,27 @@ import java.sql.Date
 
 case class Duration(mins:Int, secs:Int)
 
+sealed abstract class Rating(val value:Int)
+object Rating {
+  def apply(value:Int) = value match {
+    case 6 => Six
+    case 5 => Five
+    case 4 => Four
+    case 3 => Three
+    case 2 => Two
+    case 1 => One
+    case _ => null.asInstanceOf[Rating]
+  }
+}
+
+case object Six extends Rating(6)
+case object Five extends Rating(5)
+case object Four extends Rating(4)
+case object Three extends Rating(3)
+case object Two extends Rating(2)
+case object One extends Rating(1)
+//case object NoRating extends Rating(null.asInstanceOf[Int])
+
 trait MusicDB {
   self : ExtendedProfile =>
   import self.Implicit._
@@ -25,6 +46,7 @@ trait MusicDB {
     def map(dur: Duration) = dur.mins * 60 + dur.secs
     def comap(secs: Int) = Duration(secs / 60, secs % 60)
   }
+  implicit val ratingMapper = MappedTypeMapper.base[Rating, Int](_.value, Rating(_))
 
 
   object Artists extends Table[(Int, String, String, Genre.Genre, Date, Option[Date])]("ARTISTS") {
@@ -37,15 +59,17 @@ trait MusicDB {
 
     def * = id ~ name ~ biography ~ maingenre ~ founded ~ split
   }
-  object Albums extends Table[(Int, String, Date, Option[Int], Int)]("ALBUMS") {
+  object Albums extends Table[(Int, String, Date, Option[Rating], Int)]("ALBUMS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
     def name = column[String]("NAME", O NotNull)
     def release = column[Date]("RELEASE")
-    def rating = column[Option[Int]]("RATING")
+    def rating = column[Option[Rating]]("RATING")
     def artist_id = column[Int]("ARTIST_ID")
 
     def artist = foreignKey("albums_artists_fk", artist_id, Artists)(_.id)
 
+
+    def i = name ~ release ~ rating ~ artist_id
     def * = id ~ name ~ release ~ rating ~ artist_id
   }
   object Songs extends Table[(Int, String, Duration, Int, Int)]("SONGS") {
