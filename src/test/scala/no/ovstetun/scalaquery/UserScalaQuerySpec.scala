@@ -14,7 +14,7 @@ class UserScalaQuerySpec extends Specification with AroundExample with DBSupport
   lazy val db = Database.forDataSource(ds)
   implicit def conn = threadLocalSession.conn
 
-  val s = new H2Driver with Schema
+  val s = new H2Driver with UserDB
   import s.Implicit._
   import s._
 

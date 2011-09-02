@@ -3,7 +3,7 @@ package no.ovstetun.scalaquery
 import org.scalaquery.ql._
 import extended.{ExtendedProfile, ExtendedTable => Table}
 
-trait Schema {
+trait UserDB {
   self : ExtendedProfile =>
   import self.Implicit._
 
