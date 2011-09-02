@@ -59,7 +59,7 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val i = Artists.i.insertAll(artists :_*)
       i must beSome(3)
     }
-    "map duration" in new tdata {
+    "map duration column to Duration case class" in new tdata {
       val q = for (s <- Songs if s.id === 1001) yield s.x
       q.first must_== (1001, "Vicarious", Duration(7,6))
 
@@ -83,23 +83,18 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val q = Query(Albums.count)
       q.first must_== 27
 
-      val q2 = Albums.filter(_.rating === Six.asInstanceOf[Rating])
-//      val q2 = for (a <- Albums if a.rating === Six.asInstanceOf[Rating]) yield a
+      val q2 = Albums.filter(_.rating === (Six:Rating))
       val l2 = q2.list()
 
       l2.size must_== 2
 
-//      val q3 = Albums.filter(_.rating === None.asInstanceOf[Option[Rating]])
-      val q3 = Albums.filter(_.rating === null.asInstanceOf[Option[Rating]])
-//      q3.selectStatement must_== ""
+      val q3 = Albums.filter(_.rating isNull) //=== (null:Rating))
       val l3 = q3.list
       l3.size must_== 25
 
     }
     "query for persons with None" in new tdata {
-//      val q = Persons.filter(_.biography === None.asInstanceOf[Option[String]])
-      val q = Persons.filter(_.biography === null.asInstanceOf[Option[String]])
-//      q.selectStatement must_== ""
+      val q = Persons.filter(_.biography isNull) //=== (null:Option[String]))
       val l = q.list
       l.size must_== 22
     }
