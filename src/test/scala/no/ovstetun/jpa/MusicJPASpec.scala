@@ -143,9 +143,9 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       aenima.duration must_== 4545
     }
     "order albums according to length" in new tdata {
-      val q = RichEM.createQuery[(Artist, Long)](
+      val q = RichEM.createQuery[Array[AnyRef]](
         """
-        SELECT a, sum(s.duration)
+        SELECT a.id, sum(s.duration)
         FROM Album a JOIN a.songs s
         GROUP BY a
         ORDER BY sum(s.duration) DESC
@@ -153,7 +153,12 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       val all = q.findAll
       all.size must_== 2
 
-      val q2 = RichEM.createQuery[(Artist, Long)](
+      all(0)(0) must_== 1003
+      all(0)(1) must_== 4731
+      all(1)(0) must_== 1004
+      all(1)(1) must_== 4545
+
+      val q2 = RichEM.createQuery[Array[Object]](
         """
         SELECT a, sum(s.duration)
         FROM Album a LEFT JOIN a.songs s
@@ -162,6 +167,13 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
         """)
       val all2 = q2.findAll
       all2.size must_== 24
+
+      for (a <- all2) {
+        val al = a(0).asInstanceOf[Album]
+        al.id must beGreaterThan(1000)
+        val len = a(1).asInstanceOf[Long]
+        len must beGreaterThanOrEqualTo(0L)
+      }
     }
   }
 
