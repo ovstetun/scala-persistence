@@ -1,13 +1,18 @@
 package no.ovstetun.jdbc
 
-import no.ovstetun.DBSupport
-import org.specs2.execute.Result
-import org.specs2.specification.{AroundExample, Around}
-import java.sql.{Connection, Statement}
 import org.specs2.mutable.{After, Specification}
-
+import no.ovstetun.{Genre, DBSupport}
+import java.sql.{ResultSet, PreparedStatement, Connection, Statement}
 
 class MusicJDBCSpec extends Specification with DBSupport {
+
+  def using[Closeable <: {def close()}, X](r:Closeable)(f:Closeable => X) = {
+    try {
+      f(r)
+    } finally {
+      r.close()
+    }
+  }
 
   trait t extends After {
     implicit val con = ds.getConnection
@@ -15,8 +20,9 @@ class MusicJDBCSpec extends Specification with DBSupport {
 
     def stmt = con.createStatement()
 
-    def after = {
-      con.rollback()
+    def after {
+      if (!con.isClosed)
+        con.rollback()
     }
   }
 
@@ -42,6 +48,54 @@ class MusicJDBCSpec extends Specification with DBSupport {
       val rs = pstmt.getGeneratedKeys
       rs.next()
       rs.getInt(1) must beGreaterThan(0)
+    }
+    "fetch artist by id, wrapping statements correctly" in new t {
+      loadData
+
+      var conn : Connection = null
+      var st : PreparedStatement = null
+      var rs : ResultSet = null
+
+      try {
+        conn = con
+        st = conn.prepareStatement("SELECT id, name, maingenre FROM ARTISTS WHERE id=?")
+        st.setInt(1, 1001)
+        rs = st.executeQuery()
+        if (rs.next()) {
+          val id = rs.getInt(1)
+          val name = rs.getString(2)
+          val gen = Genre(rs.getInt(3))
+
+          id must_== 1001
+          name must_== "Tool"
+          gen must_== Genre.Rock
+        }
+      } finally {
+        rs.close()
+        st.close()
+        conn.close()
+      }
+      success
+    }
+    "fetch artist by id, wrapping with using" in new t {
+      loadData
+
+      using(con){c =>
+        using(c.prepareStatement("SELECT id, name, maingenre FROM ARTISTS WHERE id=?")){ps =>
+          ps.setInt(1, 1001)
+          using(ps.executeQuery()) {rs =>
+            if (rs.next) {
+              val id = rs.getInt(1)
+              val name = rs.getString(2)
+              val gen = Genre(rs.getInt(3))
+
+              id must_== 1001
+              name must_== "Tool"
+              gen must_== Genre.Rock
+            }
+          }
+        }
+      }
     }
     "order by duration of album" in new t {
       loadData
