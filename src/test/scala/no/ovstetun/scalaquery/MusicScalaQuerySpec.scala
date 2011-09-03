@@ -7,8 +7,9 @@ import org.scalaquery.session.Database.threadLocalSession
 import org.scalaquery.ql.extended.H2Driver
 import org.specs2.execute.Result
 import org.specs2.mutable.{Around, Specification}
-import org.scalaquery.ql.Query
 import java.sql.Date
+import org.scalaquery.ql.{Parameters, Join, Query}
+import org.scalaquery.ql.Ordering.{NullsLast, Desc}
 
 class MusicScalaQuerySpec extends Specification with DBSupport {
   lazy val db = Database.forDataSource(ds)
@@ -97,6 +98,114 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       val q = Persons.filter(_.biography isNull) //=== (null:Option[String]))
       val l = q.list
       l.size must_== 22
+    }
+    "Find rockers" in new tdata {
+      val q = for {a <- Artists if a.maingenre === Genre.Rock} yield a.id ~ a.name
+      q.list must_== List((1001, "Tool"), (1005, "A Perfect Circle"))
+    }
+    "find rockers with albumcount" in new tdata {
+//      val q = for {a <- Artists
+//                   al <- Albums.where(_.artist_id === a.id)
+//                   c <- Query(al.id.count)
+//                   _ <- Query groupBy(a.id)
+//                   if a.maingenre === Genre.Rock} yield a.id ~ a.name
+
+//      val q = for {al <- Albums
+//                   a <- Artists
+//                   c <- Query(al.id.count)
+//                   _ <- Query groupBy(a.id) if a.maingenre === Genre.Rock} yield a.id ~ a.name ~ c
+      val q = for {
+        Join(a, al) <- Artists leftJoin Albums on (_.id === _.artist_id)
+        c <- Query(al.id.count)
+        _ <- Query groupBy(a.id)
+        _ <- Query orderBy(Desc(c))
+        if a.maingenre === Genre.Rock
+      } yield a.id ~ a.name ~ c
+
+      val l = q.list
+      l must_== List((1001, "Tool", 4), (1005, "A Perfect Circle", 0))
+
+      val q2 = q.take(2).drop(1)
+      q2.list must_== List((1005, "A Perfect Circle", 0))
+
+      val q3 = q.take(1)
+      q3.list must_== List((1001, "Tool", 4))
+    }
+    "find artists with albums" in new tdata {
+      val q = for {
+        a <- Artists
+        al <- Albums
+        if a.id === al.artist_id
+      } yield a.id ~ a.name
+      q.list.toSet must_== Set((1001, "Tool"), (1002, "Pink Floyd"), (1003, "Arcade Fire"))
+
+      val q2 = for {
+        a <- Artists
+        if a.id in (for (al <- Albums) yield al.artist_id)
+      } yield a.id ~ a.name
+      q2.list must_== List((1001, "Tool"), (1002, "Pink Floyd"), (1003, "Arcade Fire"))
+    }
+    "find artist as a function by name as parameter" in new tdata {
+      def byName(n:String) = for (a <- Artists if a.name === n.bind) yield a.id ~ a.name
+      byName("Tool").first must_== (1001, "Tool")
+      byName("Pink Floyd").first must_== (1002, "Pink Floyd")
+      byName("don't think so").first must throwA[NoSuchElementException]
+
+      byName("Tool").firstOption must beSome((1001, "Tool"))
+      byName("nope").firstOption must beNone
+    }
+    "find artist as a value by name as parameter" in new tdata {
+      val qArtist = for {
+        n <- Parameters[String]
+        a <- Artists if a.name === n
+      } yield a.id ~ a.name
+
+      qArtist("Tool").first must_== (1001, "Tool")
+      qArtist("lala").firstOption must beNone
+    }
+    "find all artists with more than 4 albums" in new tdata {
+      val q = for {
+        al <- Albums
+        a  <- al.artist
+        c  <- Query(al.id.count)
+        _  <- Query groupBy(a.id)
+        _  <- Query having(_ => c > 4)
+      } yield a.id ~ a.name
+
+      q.list.size must_== 1
+      q.first must_== (1002, "Pink Floyd")
+    }
+    "find artists without albums" in new tdata {
+      val q = for {
+        a <- Artists
+        if a.id notIn (for (al <- Albums) yield al.artist_id)
+      } yield a.id ~ a.name
+      q.list.size must_== 2
+      q.list must_== List((1004,"Jay-Z"), (1005, "A Perfect Circle"))
+    }
+    "find all persons with more than one artist" in new tdata {
+      val q = for {
+        pa <- PersonsArtists
+        a  <- pa.artist
+        p  <- pa.person
+        n  <- Query(a.id.count)
+        _  <- Query groupBy(p.id)
+        _  <- Query having(_ => n > 1)
+      } yield p.id ~ p.firstname ~ p.lastname
+
+      q.list must_== List((1001, "Maynard James", "Keenan"))
+    }
+    "find length of albums" in new tdata {
+      val byId = for {
+        id <- Parameters[Int]
+        Join(al, s) <- Albums leftJoin Songs on(_.id === _.album_id)
+        len <- Query(s.duration.sum)
+        _ <- Query groupBy(al.id)
+//        _ <- Query orderBy(Desc(len))
+        if (al.id === id)
+      } yield al.id ~ len
+
+      byId.first(1003) must_== (1003, Some(Duration(78,51)))
     }
   }
 

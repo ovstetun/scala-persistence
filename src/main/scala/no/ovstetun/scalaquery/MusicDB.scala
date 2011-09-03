@@ -92,7 +92,7 @@ trait MusicDB {
 
     def * = id ~ firstname ~ lastname ~ biography
   }
-  object PersonsArtists extends Table[(Int, Int)]("PERSONS_ARTISTS") {
+  object PersonsArtists extends Table[(Int, Int)]("PERSON_ARTIST") {
     def artist_id = column[Int]("ARTIST_ID", O NotNull)
     def person_id = column[Int]("PERSON_ID", O NotNull)
 
