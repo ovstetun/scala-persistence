@@ -26,9 +26,26 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       a.id must_!= 0
     }
     "retrieve Tool with correct genre by id" in new tdata {
-      val tool = em.find(classOf[Artist], 1001)
+      val tool:Artist = em.find(classOf[Artist], 1001)
       tool.name must_== "Tool"
       tool.maingenre must_== Genre.Rock
+    }
+    "add an album to Tool" in new tdata {
+      val tool = em.find(classOf[Artist], 1001)
+      tool.albums.size must_== 4
+      val album = new Album
+      album.name = "New one"
+      album.rating = 5
+      album.release = new Date()
+
+      tool.albums.add(album)
+
+      em.flush
+      album.id must_!= 0
+
+      em.clear
+      val tool2 = em.find(classOf[Artist], 1001)
+      tool2.albums.size must_== 5
     }
     "perform an update" in new tdata {
       val tool = em.find(classOf[Artist], 1001)
@@ -42,6 +59,22 @@ class MusicJPASpec extends BaseJPASpec with DBSupport {
       val updated = em.find(classOf[Artist], 1001)
       updated.name must_== "Updated..."
       updated must not beTheSameAs(tool)
+    }
+    "update all albums" in new tdata {
+      val tool = em.find(classOf[Artist], 1001)
+      for (i <- 0 until tool.albums.size) {
+        val a = tool.albums.get(0)
+        a.rating = 5
+      }
+    }
+    "update all tool albums" in new tdata {
+      val q = em.createQuery("""
+        UPDATE Album a SET rating = 5 WHERE a.id in
+        (SELECT album.id FROM Artist art JOIN art.albums album WHERE art.id = :id)
+        """)
+      q.setParameter("id", 1001)
+      val up = q.executeUpdate()
+      up must_== 4
     }
     "retrieve Jay-Z using a query by name" in new tdata {
       val jzq = em.createQuery("SELECT a FROM Artist a WHERE a.name = :name", classOf[Artist])

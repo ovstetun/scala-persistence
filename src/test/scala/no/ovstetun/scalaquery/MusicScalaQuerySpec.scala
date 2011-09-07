@@ -35,6 +35,9 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
     "count artists" in new tdata {
       val i : Int = Query(Artists.count).first()
       i must_== 5
+
+      val q = for (a <- Artists) yield a.id.count
+      q.first must_== 5
     }
     "find artist row by id" in new tdata {
       val q = Artists.createFinderBy(_.id)
@@ -59,6 +62,18 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       )
       val i = Artists.i.insertAll(artists :_*)
       i must beSome(3)
+    }
+    "update a row" in new tdata {
+      val q = for (a <- Artists if a.id === 1001.bind) yield a.name
+      q.update("updated") must_== 1
+    }
+    "update albums" in new tdata {
+      val q = for (a <- Albums if a.artist_id === 1001) yield a.rating
+      q.update(Some(Six)) must_== 4
+    }
+    "delete an album" in new tdata {
+      val q = for (a <- Albums if a.id === 1001) yield a
+      q.delete
     }
     "map duration column to Duration case class" in new tdata {
       val q = for (s <- Songs if s.id === 1001) yield s.x
@@ -139,6 +154,11 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       } yield a.id ~ a.name
       q.list.toSet must_== Set((1001, "Tool"), (1002, "Pink Floyd"), (1003, "Arcade Fire"))
 
+      case class ArtistInfo(id:Int, name:String)
+      val qM = q.mapResult({case (id, name) => ArtistInfo(id, name)})
+      val l = qM.list.toSet
+      l.size must_== 3
+
       val q2 = for {
         a <- Artists
         if a.id in (for (al <- Albums) yield al.artist_id)
@@ -206,6 +226,14 @@ class MusicScalaQuerySpec extends Specification with DBSupport {
       } yield al.id ~ len
 
       byId.first(1003) must_== (1003, Some(Duration(78,51)))
+    }
+    "expand queries" in new tdata {
+      val q1 = for {
+        a <- Artists
+      } yield a
+
+      val q2 = for (a <- q1) yield a.id ~ a.name
+      q2.selectStatement must_!= q1.selectStatement
     }
   }
 

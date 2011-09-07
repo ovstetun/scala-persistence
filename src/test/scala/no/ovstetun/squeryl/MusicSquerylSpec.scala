@@ -33,7 +33,6 @@ class MusicSquerylSpec extends Specification with DBSupport {
   "MusicSchema with Squeryl" should {
     "insert artist" in new tdata {
       val seigmen = new Artist("Seigmen", "", Genre.Rock, "1989-12-27", Some("2008-06-22"))
-//      seigmen.save
       artists.insert(seigmen)
 
       seigmen.id must_!= 0
@@ -54,6 +53,10 @@ class MusicSquerylSpec extends Specification with DBSupport {
         t.name must_== "Tool"
         t.maingenre must_== Genre.Rock
       }
+    }
+    "find artist, query by ID" in new tdata {
+      val a = from(artists)(a => where(a.id === 1001) select(a))
+      a.headOption must beSome
     }
     "retrieve all artists" in new tdata {
 //      val l:Iterable[Artist] = artists

@@ -48,7 +48,6 @@ trait MusicDB {
   }
   implicit val ratingMapper = MappedTypeMapper.base[Rating, Int](_.value, Rating(_))
 
-
   object Artists extends Table[(Int, String, String, Genre.Genre, Date, Option[Date])]("ARTISTS") {
     def id = column[Int]("ID", O PrimaryKey, O AutoInc)
     def name = column[String]("NAME")

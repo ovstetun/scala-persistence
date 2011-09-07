@@ -7,7 +7,14 @@ public class Person {
     private String lastname;
     private Date birthDate;
     private Gender gender;
-    
+
+    public Person(String firstname, String lastname, Date birthDate, Gender gender) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthDate = birthDate;
+        this.gender = gender;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -35,4 +42,11 @@ public class Person {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+}
+
+interface PersonRepository {
+    /**
+     * @return A person if found, <code>null</code> otherwise.
+     */
+    Person findById(int id);
 }

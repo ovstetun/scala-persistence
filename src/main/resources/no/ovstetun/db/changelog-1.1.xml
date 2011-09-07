@@ -30,7 +30,7 @@
       <column name="release" type="date"/>
       <column name="rating" type="int"/>
       <column name="artist_id" type="int">
-        <constraints nullable="false"/>
+        <!--<constraints nullable="false"/>-->
       </column>
     </createTable>
     <addForeignKeyConstraint baseTableName="albums" baseColumnNames="artist_id" constraintName="albums_artists_fk"

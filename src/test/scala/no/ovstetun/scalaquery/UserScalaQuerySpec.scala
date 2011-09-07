@@ -70,6 +70,7 @@ class UserScalaQuerySpec extends Specification with AroundExample with DBSupport
     }
     "map query into a case class" in new withData {
       val q = for(u <- Users) yield u
+      
       val l:List[User]= q.mapResult({case (a,b,c,d) => User(a,b,c)}).list
       l.size must_== 3
 

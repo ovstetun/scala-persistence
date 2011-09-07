@@ -8,13 +8,18 @@ import java.util.Date
 import java.util.{List => jList}
 import org.eclipse.persistence.annotations.{Convert, Converter}
 
+trait WithID {
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  var id : Int = _
+}
+
 @Entity
 @Table(name = "artists")
-class Artist {
+class Artist extends WithID {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  var id : Int = _
+//  @Id
+//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//  var id : Int = _
   var name : String = _
   var biography : String = _
   @Temporal(value = TemporalType.DATE)
@@ -28,7 +33,7 @@ class Artist {
 //  @OneToMany(orphanRemoval = true, mappedBy = "artist")
 //  var albums: jList[Album] = _
 
-  @OneToMany(orphanRemoval = true)
+  @OneToMany(orphanRemoval = true, cascade = Array(CascadeType.ALL))
   @JoinColumn(name = "artist_id")
   var albums : jList[Album] = _
 
@@ -41,10 +46,10 @@ class Artist {
 
 @Entity
 @Table(name = "persons")
-class Person {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  var id : Int = _
+class Person  extends WithID {
+//  @Id
+//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//  var id : Int = _
   var firstname : String = _
   var lastname : String = _
 
@@ -54,11 +59,11 @@ class Person {
 
 @Entity
 @Table(name = "albums")
-class Album {
+class Album extends WithID {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  var id : Int = _
+//  @Id
+//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//  var id : Int = _
   var name : String = _
   @Temporal(value = TemporalType.DATE)
   var release : Date = _
@@ -81,10 +86,10 @@ class Album {
 
 @Entity
 @Table(name = "songs")
-class Song {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  var id : Int = _
+class Song extends WithID {
+//  @Id
+//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//  var id : Int = _
   var name : String = _
   var duration : Int = _
   var tracknumber : Int = _
