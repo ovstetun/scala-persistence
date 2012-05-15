@@ -23,9 +23,9 @@ class RichSQLSpec extends Specification with DBSupport {
 
   "RichSQL" should {
     "fetch an artist" in new t {
-//      val ps = con.prepareStatement("SELECT name, biography, founded, maingenre FROM ARTISTS WHERE id=?")
-//      val a = ps << 1001 <<! {rs =>
-      val a = "SELECT name, biography, founded, maingenre FROM ARTISTS WHERE id=?" << 1001 <<! {rs =>
+      val ps = con.prepareStatement("SELECT name, biography, founded, maingenre FROM ARTISTS WHERE id=?")
+      val a = ps << 1001 <<! {rs =>
+//      val a = "SELECT name, biography, founded, maingenre FROM ARTISTS WHERE id=?" << 1001 <<! {rs =>
         new Artist(rs, rs, rs, None, Genre(rs))
       }
       val artist = if (a.isEmpty) None else Some(a.head)
@@ -40,7 +40,7 @@ class RichSQLSpec extends Specification with DBSupport {
         rs.nextInt
       })
 
-      val q = "INSERT INTO ARTISTS(name, biography, founded, maingenre) VALUES (?,?,?,?)"
+      val q : RichPreparedStatement = "INSERT INTO ARTISTS(name, biography, founded, maingenre) VALUES (?,?,?,?)"
       q << "Tool" << "bla bla..." << Date.valueOf("1990-01-02") << Rock.id <<!
 
       val c2 = query("SELECT COUNT(id) FROM ARTISTS", {rs =>

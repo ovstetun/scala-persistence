@@ -95,7 +95,7 @@ class UserScalaQuerySpec extends Specification with AroundExample with DBSupport
 
   "Posts" should {
     "insert" in {
-//      Posts.forinsert.insert(("", None, 4)) must_== 1
+      // Posts.forinsert.insert(("", None, 4)) must_== 1
       pending
     }
   }
